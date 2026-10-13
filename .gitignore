@@ -1,0 +1,11 @@
+.env
+
+data/
+
+__pychache/
+
+
+venv/
+
+.DS_Store
+.vscode/
