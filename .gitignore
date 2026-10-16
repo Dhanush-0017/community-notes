@@ -2,7 +2,7 @@
 
 data/
 
-__pychache/
+__pycache__/
 
 
 venv/
