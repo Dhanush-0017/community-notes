@@ -11,6 +11,7 @@ This is part of my work as a Graduate Research Assistant at Georgia State Univer
 1. Builds a dataset of **500 recent Helpful notes on 500 different English tweets** (`dataset/10-05_10-13/`).
 2. Finds **all data about one tweet** across the Community Notes datasets.
 3. Checks that a dataset is correct.
+4. Explores the data (exploratory data analysis) in two notebooks: one for the 500-note dataset, one for the "SAUDI IS BURNING" tweet.
 
 ## The data
 
@@ -55,8 +56,8 @@ Each note has two labels:
 | `find_tweet_data.py` | Finds all data about one tweet and saves it in `dataset/tweet_<tweetId>/` |
 | `check_dataset.py` | Checks a dataset folder and prints PASS or FAIL |
 | `get_tweet.py` | Gets one tweet from the X API (useful to test the API key) |
-| `export_to_excel.py` | Puts all CSV files of a dataset folder into one Excel file, one sheet per file |
-| `eda.ipynb` | Simple exploratory data analysis of the dataset |
+| `eda_10-05_10-13.ipynb` | Exploratory data analysis of the 500-note dataset |
+| `saudi_tweet.ipynb` | Case study of the "SAUDI IS BURNING" tweet: its 4 notes and why only one was shown |
 | `dataset/tweet_cache.csv` | Every tweet already read from the X API, so we do not pay twice |
 
 ## The recent Helpful notes dataset (`dataset/10-05_10-13/`)
@@ -64,10 +65,11 @@ Each note has two labels:
 | File | One row is |
 |---|---|
 | `notes.csv` | one note |
-| `note_status.csv` | the status of one note |
+| `note_status.csv` | X's decision about one note (Helpful or not), and when it was made |
 | `ratings.csv` | one person's rating of one note |
 | `tweets.csv` | one tweet (from the X API) |
 | `combined.csv` | one note with its tweet, both labels and rating counts |
+| `10-05_10-13.xlsx` | all the files above in one Excel file, one sheet per file |
 
 How it is made:
 
@@ -80,6 +82,26 @@ How it is made:
 Result: 500 notes on 500 tweets, written Oct 5 to Oct 12, with 43,656 ratings in total.
 
 `dataset/helpful/` is an older version: 500 random Helpful notes from all years, built with only 2 of the 9 ratings files.
+
+## The "SAUDI IS BURNING" tweet (`dataset/tweet_2109031558967615703/`)
+
+Every row about this one tweet, made with `find_tweet_data.py`. It has 4 notes (only one was shown on X) and 456 ratings.
+
+| File | One row is |
+|---|---|
+| `notes.csv`, `note_status.csv`, `ratings.csv`, `combined.csv` | same as in the 500-note dataset |
+| `note_requests.csv` | the note requests for the tweet (from the Note Requests file) |
+| `user_enrollment.csv` | one person involved: a rater or a note writer |
+
+## Exploratory data analysis
+
+Open the notebooks in VS Code or Jupyter and run all cells. `eda_10-05_10-13.ipynb` also reads `data/userEnrollment-00000.tsv`, to tell AI note writers from human writers.
+
+Main findings:
+
+- **63% of the 500 Helpful notes were written by AI note writers** (15 accounts with the status `apiEarnedIn`). The 5 most active writers, all AI, wrote half of the notes.
+- Notes come fast (median 6.6 hours after the tweet), but take a median of about 8 hours to become Helpful.
+- A note is not shown by majority vote. In the Saudi case, the note with the highest share of Helpful ratings was not shown, because the rater groups (CORE and EXPANSION) disagreed. The human-written note won over two AI-written notes.
 
 ## How to run
 
@@ -114,4 +136,4 @@ Reading tweets from the X API costs about $0.005 per tweet. Building the dataset
 - Notes from the last days of the range have fewer ratings, because people were still rating them when X made the download.
 - The tweet language comes from X's own label.
 - Tweets that were deleted or private were skipped.
-- `tweet_author_id` is exact for 494 of the 500 tweets. For 6 tweets it was rounded by an old bug in the tweet cache.
+- `tweet_author_id` is exact for 496 of the 500 tweets. For 4 tweets it lost its last digits because of an old bug in the tweet cache; these tweets must be read again from the X API if author IDs are needed.
