@@ -12,7 +12,7 @@ NOTES_FILES = os.path.join("data", "notes", "notes-*.tsv")
 RATINGS_FILES = os.path.join("data", "ratings", "ratings-*.tsv")
 STATUS_FILES = os.path.join("data", "noteStatusHistory-*.tsv")
 
-OUTPUT_FOLDER = os.path.join("dataset", "recent_helpful")
+OUTPUT_FOLDER = os.path.join("dataset", "10-05_10-13")
 CACHE_FILE = os.path.join("dataset", "tweet_cache.csv")
 
 

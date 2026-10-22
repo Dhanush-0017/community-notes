@@ -8,7 +8,7 @@ This is part of my work as a Graduate Research Assistant at Georgia State Univer
 
 ## What this project does
 
-1. Builds a dataset of **500 recent Helpful notes on 500 different English tweets** (`dataset/recent_helpful/`).
+1. Builds a dataset of **500 recent Helpful notes on 500 different English tweets** (`dataset/10-05_10-13/`).
 2. Finds **all data about one tweet** across the Community Notes datasets.
 3. Checks that a dataset is correct.
 
@@ -55,9 +55,11 @@ Each note has two labels:
 | `find_tweet_data.py` | Finds all data about one tweet and saves it in `dataset/tweet_<tweetId>/` |
 | `check_dataset.py` | Checks a dataset folder and prints PASS or FAIL |
 | `get_tweet.py` | Gets one tweet from the X API (useful to test the API key) |
+| `export_to_excel.py` | Puts all CSV files of a dataset folder into one Excel file, one sheet per file |
+| `eda.ipynb` | Simple exploratory data analysis of the dataset |
 | `dataset/tweet_cache.csv` | Every tweet already read from the X API, so we do not pay twice |
 
-## The recent Helpful notes dataset (`dataset/recent_helpful/`)
+## The recent Helpful notes dataset (`dataset/10-05_10-13/`)
 
 | File | One row is |
 |---|---|
@@ -98,7 +100,7 @@ Then:
 ```
 python build_helpful_dataset.py                    # build the dataset (uses the X API)
 python build_helpful_dataset.py --no-tweets        # test run, does not use the X API
-python check_dataset.py dataset/recent_helpful     # check the dataset
+python check_dataset.py dataset/10-05_10-13     # check the dataset
 python find_tweet_data.py 2109031558967615703      # all data about one tweet
 python get_tweet.py 2109031558967615703            # one tweet from the X API
 ```
