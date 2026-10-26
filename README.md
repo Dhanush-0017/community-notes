@@ -64,7 +64,7 @@ Each note has two labels:
 
 | File | One row is |
 |---|---|
-| `notes.csv` | one note |
+| `notes.csv` | one note, plus the writer's fields from User Enrollment (`writer_...` columns; `writer_enrollmentState = apiEarnedIn` = AI note writer) |
 | `note_status.csv` | X's decision about one note (Helpful or not), and when it was made |
 | `ratings.csv` | one person's rating of one note |
 | `tweets.csv` | one tweet (from the X API) |

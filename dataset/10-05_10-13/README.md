@@ -12,6 +12,8 @@ Note 2109061654621098457 (the "SAUDI IS BURNING" tweet) was added on purpose, no
 ## Files
 - tweets.csv: one row per tweet (from the X API). Key: tweetId
 - notes.csv: one row per note. Keys: noteId, tweetId
+  The writer_ columns come from the User Enrollment file (the note writer's row).
+  writer_enrollmentState = apiEarnedIn means the note was written by an AI note writer.
 - note_status.csv: one row per note. Key: noteId
 - ratings.csv: one row per rating. Key: noteId
 - combined.csv: one row per note with its tweet, both labels and rating counts

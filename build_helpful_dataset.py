@@ -81,7 +81,7 @@ def make_combined(notes: pd.DataFrame, ratings: pd.DataFrame, status: pd.DataFra
         One row per note with the tweet text, note text, the writer's label (classification1),
         the algorithm's label (classification2), the rating counts and the tweet information.
     """
-    combined = notes[["noteId", "tweetId", "classification", "summary", "createdAtMillis"]].copy()
+    combined = notes[["noteId", "tweetId", "classification", "summary", "createdAtMillis", "writer_enrollmentState"]].copy()
     combined = combined.rename(columns={
         "classification": "classification1",
         "summary": "note_text",
@@ -144,6 +144,8 @@ def save_readme():
     lines.append("## Files")
     lines.append("- tweets.csv: one row per tweet (from the X API). Key: tweetId")
     lines.append("- notes.csv: one row per note. Keys: noteId, tweetId")
+    lines.append("  The writer_ columns come from the User Enrollment file (the note writer's row).")
+    lines.append("  writer_enrollmentState = apiEarnedIn means the note was written by an AI note writer.")
     lines.append("- note_status.csv: one row per note. Key: noteId")
     lines.append("- ratings.csv: one row per rating. Key: noteId")
     lines.append("- combined.csv: one row per note with its tweet, both labels and rating counts")
