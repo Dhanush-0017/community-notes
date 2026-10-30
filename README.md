@@ -58,6 +58,8 @@ Each note has two labels:
 | `get_tweet.py` | Gets one tweet from the X API (useful to test the API key) |
 | `eda_10-05_10-13.ipynb` | Exploratory data analysis of the 500-note dataset |
 | `saudi_tweet.ipynb` | Case study of the "SAUDI IS BURNING" tweet: its 4 notes and why only one was shown |
+| `eda_summary.ipynb` | Short summary of the EDA: the 4 main findings with the code behind them |
+| `saudi_summary.ipynb` | Short summary of the Saudi tweet: AI vs human notes, the raters, and how the approval works |
 | `dataset/tweet_cache.csv` | Every tweet already read from the X API, so we do not pay twice |
 
 ## The recent Helpful notes dataset (`dataset/10-05_10-13/`)

@@ -7,6 +7,7 @@
 #   3. Ratings         -> every rating of those notes          (search by noteId)
 #   4. Note Requests   -> requests for a note on this tweet    (search by tweetId)
 #   5. User Enrollment -> the people who wrote or rated them   (search by participantId)
+#   6. Joins them: each note gets its writer's info, each rating gets its rater's info
 #
 # How to run:
 #   python find_tweet_data.py 2109031558967615703
@@ -101,6 +102,48 @@ def remove_repeats(table, key_columns):
     return table.drop_duplicates(key_columns)
 
 
+def add_people_info(notes, status, ratings, users):
+    # Put everything about one note or one rating on the same row:
+    #   note_label    "Note 1", "Note 2", ... in the order the notes were written
+    #   writer_type   AI (status apiEarnedIn), Collaborative (AI-drafted collaborative note) or Human
+    #   writer_...    the note writer's row from User Enrollment
+    #   rater_...     the rater's row from User Enrollment
+    notes = notes.copy()
+    notes["order"] = notes["createdAtMillis"].astype("int64")
+    notes = notes.sort_values("order").drop(columns="order").reset_index(drop=True)
+
+    note_labels = {}
+    for position, note_id in enumerate(notes["noteId"]):
+        note_labels[note_id] = "Note " + str(position + 1)
+
+    writer_info = users.add_prefix("writer_")
+    notes = notes.merge(writer_info, left_on="noteAuthorParticipantId", right_on="writer_participantId", how="left")
+    notes = notes.drop(columns="writer_participantId")
+
+    writer_types = []
+    for _, note in notes.iterrows():
+        if str(note["isCollaborativeNote"]) == "1":
+            writer_types.append("Collaborative")
+        elif note["writer_enrollmentState"] == "apiEarnedIn":
+            writer_types.append("AI")
+        else:
+            writer_types.append("Human")
+    notes.insert(0, "writer_type", writer_types)
+    notes.insert(0, "note_label", notes["noteId"].map(note_labels))
+
+    status = status.copy()
+    status.insert(0, "note_label", status["noteId"].map(note_labels))
+
+    if len(ratings) > 0:
+        ratings = ratings.copy()
+        rater_info = users.add_prefix("rater_")
+        ratings = ratings.merge(rater_info, left_on="raterParticipantId", right_on="rater_participantId", how="left")
+        ratings = ratings.drop(columns="rater_participantId")
+        ratings.insert(0, "note_label", ratings["noteId"].map(note_labels))
+
+    return notes, status, ratings
+
+
 def main():
     tweet_id = get_tweet_id()
     data_folder = get_data_folder()
@@ -164,6 +207,10 @@ def main():
     print("   ->", len(users), "users found")
     print()
 
+    # 6. Put the writer and rater information next to each note and rating
+    if len(notes) > 0:
+        notes, status, ratings = add_people_info(notes, status, ratings, users)
+
     # save every result in its own file
     output_folder = os.path.join("dataset", "tweet_" + tweet_id)
     os.makedirs(output_folder, exist_ok=True)
@@ -193,4 +240,5 @@ def main():
     print("Saved in", output_folder)
 
 
-main()
+if __name__ == "__main__":
+    main()
