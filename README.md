@@ -1,23 +1,46 @@
-# X Community Notes Dataset
+# X Community Notes: how a note gets shown
 
-This project works with data from X Community Notes. Community Notes is X's system where users add notes to posts that may be misleading. Other users rate the notes, and an algorithm decides if a note is shown under the post.
+I'm a Graduate Research Assistant at Georgia State University. This project uses X's public Community Notes data to understand how X decides which note is shown under a tweet.
 
-X shares all notes, ratings and note statuses as public data. This project uses that data together with the X API to build a clean dataset for research.
+Community Notes in short: people write notes on tweets, other people rate the notes (Helpful / Somewhat / Not Helpful), and X's algorithm decides which note is shown.
 
-This is part of my work as a Graduate Research Assistant at Georgia State University.
+## What I did
 
-## What this project does
+1. **Built a dataset** of 500 recent Helpful notes on 500 English tweets (Oct 5-12, 2026) -> `dataset/10-05_10-13/`
+2. **Explored it** (EDA) -> `eda_summary.ipynb`. Main finding: 63% of the Helpful notes were written by AI note writers.
+3. **Picked one tweet** ("SAUDI IS BURNING") that got 4 notes, where only Note 4 was shown, and collected everything about it -> `dataset/tweet_2109031558967615703/`
+4. **Read X's open-source algorithm code** (github.com/twitter/communitynotes) to find the real rules.
+5. **Recreated the steps** on that tweet -> `saudi_summary.ipynb` and `score_with_x_model.py`:
+   - which raters X trusts (trust score from their past ratings)
+   - which model decides (Core or Expansion)
+   - each note's helpfulness score and one-sidedness, using X's own model code
+6. **Drew the whole flow** -> `Community_Notes.drawio`, tab "Why Note 4 was shown"
 
-1. Builds a dataset of **500 recent Helpful notes on 500 different English tweets** (`dataset/10-05_10-13/`).
-2. Finds **all data about one tweet** across the Community Notes datasets.
-3. Checks that a dataset is correct.
-4. Explores the data (exploratory data analysis) in two notebooks: one for the 500-note dataset, one for the "SAUDI IS BURNING" tweet.
+**Result:** Note 4 was not shown because it got more votes. It was shown because raters who usually disagree **both** found it helpful. Notes 1-3 were liked mostly by one side.
+
+## How it works (the flow in the diagram)
+
+```
+raters -> trusted or not -> they rate the 4 notes -> X's model -> score + one-sidedness -> shown / waiting / blocked
+```
+
+- **Trusted rater:** of their past ratings made before X decided, at least 66% matched X's final decision, and they have 10+ ratings.
+- **Which model:** a model only decides a note if half of its ratings come from that model's rater groups. Here only 19-25% came from Core groups, so the Expansion model decided.
+- **Shown:** helpfulness score 0.40+ and one-sidedness under 0.5.
+
+## How the files connect
+
+| Key | Connects |
+|---|---|
+| `noteId` | notes, ratings and note status |
+| `raterParticipantId` / `noteAuthorParticipantId` | a rating or a note to the person in User Enrollment (`participantId`) |
+| `tweetId` | a note to its tweet |
 
 ## The data
 
 The raw data comes from X: https://communitynotes.x.com/guide/en/under-the-hood/download-data
 
-It is not in this repository because it is too big (about 45 GB). To run the code, download it and put it in a `data` folder like this:
+It is about 45 GB, so it is not in this repository. Download it and put it in a `data` folder:
 
 ```
 data/
@@ -28,115 +51,59 @@ data/
 └── userEnrollment-00000.tsv
 ```
 
-The current dataset uses the download with data up to **Oct 13, 2026**.
+I used the download with data up to Oct 13, 2026.
 
-The datasets are connected by IDs:
+### Saudi tweet folder (`dataset/tweet_2109031558967615703/`)
 
-- `noteId` connects Notes, Note Status and Ratings
-- `tweetId` connects a note to its tweet
-- `participantId` connects a person to User Enrollment
+| File | One row is | Important columns |
+|---|---|---|
+| `notes.csv` | one note | `note_label`, `summary` (note text), `writer_type`, `writer_enrollmentState` (`apiEarnedIn` = AI) |
+| `ratings.csv` | one rating | `raterParticipantId`, `helpfulnessLevel`, `rater_modelingPopulation`, `rater_modelingGroup` |
+| `note_status.csv` | X's decision on one note | `currentStatus`, `currentExpansionStatus`, `currentDecidedBy` |
+| `user_enrollment.csv` | one person | `enrollmentState`, `modelingPopulation`, `modelingGroup` |
+| `note_requests.csv` | a request for a note | `suggestions` |
+| `combined.csv` | one note with its tweet | `tweet_text`, `note_text` |
+| `rater_profiles.csv` | one rater (made in `saudi_summary.ipynb`) | `valid_ratings`, `agreeing_ratings`, `trust_score`, `trusted` |
+| `model_scores.csv` | one note (made by `score_with_x_model.py`) | `helpfulness_score`, `one_sidedness` |
+| `rater_sides.csv` | one rater (made by `score_with_x_model.py`) | `rater_side`, `rater_generosity` |
 
-One tweet can have many notes, and one note can have many ratings. A note is shown on X only when it is rated **Helpful**.
+### 500-note folder (`dataset/10-05_10-13/`)
 
-Each note has two labels:
+`notes.csv`, `ratings.csv`, `note_status.csv`, `tweets.csv`, `combined.csv` (one row = one note with its tweet and rating counts), and the same files in `10-05_10-13.xlsx`.
 
-- **classification1**: the writer's label on the tweet (misleading or not misleading)
-- **classification2**: the algorithm's label on the note (Helpful, Not Helpful, or Needs More Ratings)
+How I chose the notes: Helpful notes written Oct 5-13, 2026, one note per tweet (the one with the most ratings), random order (seed 42), English tweets that still exist, stop at 500. The Saudi note is always included.
 
 ## Files
 
 | File | What it does |
 |---|---|
-| `build_helpful_dataset.py` | Main file. Runs the 3 steps below and saves the dataset |
-| `settings.py` | All settings (dates, paths, number of notes ...) and helpers to read the data files |
-| `choose_notes.py` | Step 1: choose the candidate notes |
-| `get_tweets.py` | Step 2: get the tweets from the X API |
-| `collect_data.py` | Step 3: collect the Notes, Ratings and Note Status rows of the chosen notes |
-| `x_api.py` | Functions to get tweets from the X API |
-| `find_tweet_data.py` | Finds all data about one tweet and saves it in `dataset/tweet_<tweetId>/` |
-| `check_dataset.py` | Checks a dataset folder and prints PASS or FAIL |
-| `get_tweet.py` | Gets one tweet from the X API (useful to test the API key) |
-| `eda_10-05_10-13.ipynb` | Exploratory data analysis of the 500-note dataset |
-| `saudi_tweet.ipynb` | Case study of the "SAUDI IS BURNING" tweet: its 4 notes and why only one was shown |
-| `eda_summary.ipynb` | Short summary of the EDA: the 4 main findings with the code behind them |
-| `saudi_summary.ipynb` | Short summary of the Saudi tweet: AI vs human notes, the raters, and how the approval works |
-| `score_with_x_model.py` | Scores the Saudi notes with X's own model on one month of ratings (needs ../communitynotes, torch, pyarrow, wandb) |
-| `dataset/tweet_cache.csv` | Every tweet already read from the X API, so we do not pay twice |
-
-## The recent Helpful notes dataset (`dataset/10-05_10-13/`)
-
-| File | One row is |
-|---|---|
-| `notes.csv` | one note, plus the writer's fields from User Enrollment (`writer_...` columns; `writer_enrollmentState = apiEarnedIn` = AI note writer) |
-| `note_status.csv` | X's decision about one note (Helpful or not), and when it was made |
-| `ratings.csv` | one person's rating of one note |
-| `tweets.csv` | one tweet (from the X API) |
-| `combined.csv` | one note with its tweet, both labels and rating counts |
-| `10-05_10-13.xlsx` | all the files above in one Excel file, one sheet per file |
-
-How it is made:
-
-1. Find the notes that are Helpful in Note Status, were written between **Oct 5 and Oct 13, 2026**, are in Notes, and have Ratings.
-2. If a tweet has more than one Helpful note, keep the note with the **most ratings**.
-3. Put the notes in a random order (seed 42, so the result is the same every time). The note `2109061654621098457` (the "SAUDI IS BURNING" tweet) is always put first, because it was asked for.
-4. Get each note's tweet from the X API. Keep the note only if the tweet still exists and is in English. Stop at 500 notes.
-5. Take all rows of those 500 notes from Notes, Note Status and all 9 Ratings files.
-
-Result: 500 notes on 500 tweets, written Oct 5 to Oct 12, with 43,656 ratings in total.
-
-`dataset/helpful/` is an older version: 500 random Helpful notes from all years, built with only 2 of the 9 ratings files.
-
-## The "SAUDI IS BURNING" tweet (`dataset/tweet_2109031558967615703/`)
-
-Every row about this one tweet, made with `find_tweet_data.py`. It has 4 notes (only one was shown on X) and 456 ratings.
-
-| File | One row is |
-|---|---|
-| `notes.csv`, `note_status.csv`, `ratings.csv`, `combined.csv` | same as in the 500-note dataset |
-| `note_requests.csv` | the note requests for the tweet (from the Note Requests file) |
-| `user_enrollment.csv` | one person involved: a rater or a note writer |
-
-## Exploratory data analysis
-
-Open the notebooks in VS Code or Jupyter and run all cells. `eda_10-05_10-13.ipynb` also reads `data/userEnrollment-00000.tsv`, to tell AI note writers from human writers.
-
-Main findings:
-
-- **63% of the 500 Helpful notes were written by AI note writers** (15 accounts with the status `apiEarnedIn`). The 5 most active writers, all AI, wrote half of the notes.
-- Notes come fast (median 6.6 hours after the tweet), but take a median of about 8 hours to become Helpful.
-- A note is not shown by majority vote. In the Saudi case, the note with the highest share of Helpful ratings was not shown, because the rater groups (CORE and EXPANSION) disagreed. The human-written note won over two AI-written notes.
+| `build_helpful_dataset.py` | builds the 500-note dataset (uses `choose_notes.py`, `get_tweets.py`, `collect_data.py`) |
+| `settings.py` | dates, paths and other settings |
+| `x_api.py`, `get_tweet.py` | read tweets from the X API |
+| `find_tweet_data.py` | collects everything about one tweet into `dataset/tweet_<tweetId>/` |
+| `check_dataset.py` | checks a dataset folder (PASS / FAIL) |
+| `eda_10-05_10-13.ipynb` | full EDA of the 500 notes |
+| `eda_summary.ipynb` | the 4 main EDA findings |
+| `saudi_summary.ipynb` | the Saudi tweet, step by step (same steps as the diagram) |
+| `saudi_tweet.ipynb` | an older, shorter look at the Saudi tweet |
+| `score_with_x_model.py` | runs X's own model on one month of ratings |
+| `Community_Notes.drawio` | the diagrams |
 
 ## How to run
 
-You need Python 3.10 or newer. Install the packages with:
+Python 3.10+, then `pip install -r requirements.txt`. For the X API, make a `.env` file with `X_API=your_bearer_token`.
 
 ```
-pip install -r requirements.txt
+python build_helpful_dataset.py                  # build the 500-note dataset (uses the X API)
+python check_dataset.py dataset/10-05_10-13      # check it
+python find_tweet_data.py 2109031558967615703    # everything about one tweet
 ```
 
-For the scripts that use the X API, create a file named `.env` with your key:
-
-```
-X_API=your_bearer_token
-```
-
-Then:
-
-```
-python build_helpful_dataset.py                    # build the dataset (uses the X API)
-python build_helpful_dataset.py --no-tweets        # test run, does not use the X API
-python check_dataset.py dataset/10-05_10-13     # check the dataset
-python find_tweet_data.py 2109031558967615703      # all data about one tweet
-python get_tweet.py 2109031558967615703            # one tweet from the X API
-```
-
-To change the dates, the number of notes or the must-have note, edit `settings.py`.
-
-Reading tweets from the X API costs about $0.005 per tweet. Building the dataset reads the 43 GB of ratings twice, so it takes 30 to 60 minutes.
+To run `score_with_x_model.py`, put X's code next to this folder (`../communitynotes`), install `torch pyarrow wandb`, and run `WANDB_MODE=disabled python score_with_x_model.py`.
 
 ## Limits
 
-- Notes from the last days of the range have fewer ratings, because people were still rating them when X made the download.
-- The tweet language comes from X's own label.
-- Tweets that were deleted or private were skipped.
-- `tweet_author_id` is exact for 496 of the 500 tweets. For 4 tweets it lost its last digits because of an old bug in the tweet cache; these tweets must be read again from the X API if author IDs are needed.
+- My model scores use one month of ratings; X uses its full history, so my scores are lower than X's. Compare the notes with each other.
+- My trust score is a close copy of X's rule. It skips the small penalty for rating abusive notes as Helpful.
+- Notes from the last days of the date range have fewer ratings, because people were still rating them.
+- Deleted or private tweets were skipped.

@@ -1,18 +1,20 @@
-"""Score the 4 Saudi notes with X's own matrix factorization model.
+"""Score the 4 Saudi notes with X's own model.
 
-X does not publish each note's score, so this script recreates it:
-    1. Take one month of ratings, up to the moment Note 4 was shown, from raters in the
-       Core and Expansion groups (the raters the Expansion model uses).
-    2. Apply X's filters: notes need 5+ ratings, raters need 10+ ratings.
-    3. Fit X's MatrixFactorization class (from github.com/twitter/communitynotes).
-    4. Save each note's helpfulness score (intercept) and one-sidedness (factor), and
-       each Saudi rater's side (factor).
+X does not publish each note's score, so this script makes it again:
+    1. Read one month of ratings, up to the moment Note 4 was shown.
+    2. Keep notes with 5+ ratings and raters with 10+ ratings (X's rule).
+    3. Run X's model (MatrixFactorization, from github.com/twitter/communitynotes).
+    4. Save each note's score and each rater's side.
 
-Needs a copy of X's repository next to this project (../communitynotes) and the packages
-torch, pyarrow and wandb (pip install torch pyarrow wandb).
+The model gives every note 2 numbers:
+    helpfulness_score: how much raters from all sides like the note
+    one_sidedness:     how much only one side likes it (X blocks 0.5 or more)
+and every rater 2 numbers:
+    rater_side:        which side the rater is on (learned from who they agree with)
+    rater_generosity:  how easily the rater says Helpful
 
-Usage:
-    WANDB_MODE=disabled python score_with_x_model.py
+Needs X's code next to this project (../communitynotes) and: pip install torch pyarrow wandb
+Run:  WANDB_MODE=disabled python score_with_x_model.py
 """
 
 import glob
@@ -21,125 +23,111 @@ import sys
 
 import pandas as pd
 
-X_REPO = os.path.join("..", "communitynotes", "scoring", "src")
-sys.path.insert(0, X_REPO)
+# X's model code
+sys.path.insert(0, os.path.join("..", "communitynotes", "scoring", "src"))
 from scoring.matrix_factorization.matrix_factorization import MatrixFactorization  # noqa: E402
 
 SAUDI_FOLDER = os.path.join("dataset", "tweet_2109031558967615703")
-DAYS_OF_RATINGS = 30
+ONE_MONTH_MS = 30 * 24 * 60 * 60 * 1000
 
-# group lists from X's code: scoring/src/scoring/constants.py
-CORE_GROUPS = {1, 2, 3, 6, 8, 9, 10, 11, 13, 14, 19, 21, 25}
-EXPANSION_GROUPS = {0, 4, 5, 7, 12, 15, 16, 20, 22, 23, 24, 26, 27, 28, 29, 33}
+# rater groups the Expansion model uses (from X's constants.py: Core groups + Expansion groups)
+EXPANSION_MODEL_GROUPS = {1, 2, 3, 6, 8, 9, 10, 11, 13, 14, 19, 21, 25,
+                          0, 4, 5, 7, 12, 15, 16, 20, 22, 23, 24, 26, 27, 28, 29, 33}
+
+# rating -> number, same as X's process_data.py
+RATING_VALUES = {"HELPFUL": 1.0, "SOMEWHAT_HELPFUL": 0.5, "NOT_HELPFUL": 0.0}
 
 
-def load_window_ratings(end_millis: int) -> pd.DataFrame:
-    """Read one month of ratings before end_millis, from raters the Expansion model uses.
+def read_last_month_of_ratings(end_ms):
+    """Read every rating from the month before end_ms, by raters the Expansion model uses.
 
-    Args:
-        end_millis: the last moment to include, in milliseconds.
-
-    Returns:
-        One row per rating with noteId, raterParticipantId and helpfulNum (1, 0.5 or 0).
+    Returns one row per rating: noteId, raterParticipantId, helpfulNum (1, 0.5 or 0).
     """
-    start_millis = end_millis - DAYS_OF_RATINGS * 24 * 60 * 60 * 1000
+    start_ms = end_ms - ONE_MONTH_MS
 
     users = pd.read_csv(os.path.join("data", "userEnrollment-00000.tsv"), sep="\t",
                         usecols=["participantId", "modelingGroup"], dtype={"participantId": str})
-    is_expansion_rater = users["modelingGroup"].isin(CORE_GROUPS | EXPANSION_GROUPS)
-    expansion_raters = set(users.loc[is_expansion_rater, "participantId"])
+    good_raters = set(users.loc[users["modelingGroup"].isin(EXPANSION_MODEL_GROUPS), "participantId"])
 
-    kept_parts = []
-    columns = ["noteId", "raterParticipantId", "createdAtMillis", "helpfulnessLevel", "helpful", "notHelpful"]
+    kept = []
     for file in sorted(glob.glob(os.path.join("data", "ratings", "ratings-*.tsv"))):
         print("    reading", file)
-        for chunk in pd.read_csv(file, sep="\t", usecols=columns, chunksize=5_000_000,
+        for chunk in pd.read_csv(file, sep="\t", chunksize=5_000_000,
+                                 usecols=["noteId", "raterParticipantId", "createdAtMillis", "helpfulnessLevel"],
                                  dtype={"noteId": str, "raterParticipantId": str}):
-            in_window = (chunk["createdAtMillis"] >= start_millis) & (chunk["createdAtMillis"] <= end_millis)
-            by_expansion_rater = chunk["raterParticipantId"].isin(expansion_raters)
-            kept_parts.append(chunk[in_window & by_expansion_rater])
-    ratings = pd.concat(kept_parts)
+            in_month = chunk["createdAtMillis"].between(start_ms, end_ms)
+            by_good_rater = chunk["raterParticipantId"].isin(good_raters)
+            kept.append(chunk[in_month & by_good_rater])
+    ratings = pd.concat(kept)
 
-    # same rating values as X's process_data.py
-    ratings["helpfulNum"] = float("nan")
-    ratings.loc[ratings["helpful"] == 1, "helpfulNum"] = 1.0
-    ratings.loc[ratings["notHelpful"] == 1, "helpfulNum"] = 0.0
-    ratings.loc[ratings["helpfulnessLevel"] == "HELPFUL", "helpfulNum"] = 1.0
-    ratings.loc[ratings["helpfulnessLevel"] == "SOMEWHAT_HELPFUL", "helpfulNum"] = 0.5
-    ratings.loc[ratings["helpfulnessLevel"] == "NOT_HELPFUL", "helpfulNum"] = 0.0
+    ratings["helpfulNum"] = ratings["helpfulnessLevel"].map(RATING_VALUES)
     ratings = ratings.dropna(subset=["helpfulNum"])
-
     return ratings[["noteId", "raterParticipantId", "helpfulNum"]]
 
 
-def apply_x_filters(ratings: pd.DataFrame) -> pd.DataFrame:
-    """Keep notes with 5+ ratings and raters with 10+ ratings, repeating until nothing changes.
+def keep_active_notes_and_raters(ratings):
+    """X's rule: notes need 5+ ratings and raters need 10+ ratings.
 
-    Args:
-        ratings: one row per rating.
-
-    Returns:
-        The ratings that pass X's prescoring filters.
+    Removing one can push the other under its limit, so repeat until nothing changes.
     """
     while True:
         size_before = len(ratings)
 
-        ratings_per_note = ratings.groupby("noteId").size()
-        notes_to_keep = ratings_per_note[ratings_per_note >= 5].index
-        ratings = ratings[ratings["noteId"].isin(notes_to_keep)]
+        note_counts = ratings["noteId"].value_counts()
+        ratings = ratings[ratings["noteId"].isin(note_counts[note_counts >= 5].index)]
 
-        ratings_per_rater = ratings.groupby("raterParticipantId").size()
-        raters_to_keep = ratings_per_rater[ratings_per_rater >= 10].index
-        ratings = ratings[ratings["raterParticipantId"].isin(raters_to_keep)]
+        rater_counts = ratings["raterParticipantId"].value_counts()
+        ratings = ratings[ratings["raterParticipantId"].isin(rater_counts[rater_counts >= 10].index)]
 
         if len(ratings) == size_before:
             return ratings
 
 
 def main():
-    """Fit X's model on the month of ratings and save the Saudi notes' scores."""
     notes = pd.read_csv(os.path.join(SAUDI_FOLDER, "notes.csv"), dtype={"noteId": str})
     status = pd.read_csv(os.path.join(SAUDI_FOLDER, "note_status.csv"), dtype={"noteId": str})
     saudi_ratings = pd.read_csv(os.path.join(SAUDI_FOLDER, "ratings.csv"), dtype={"raterParticipantId": str})
 
-    is_note_4 = status["note_label"] == "Note 4"
-    note_4_shown_millis = int(status.loc[is_note_4, "timestampMillisOfFirstNonNMRStatus"].iloc[0])
-
-    print("Step 1: one month of ratings before Note 4 was shown")
-    ratings = load_window_ratings(note_4_shown_millis)
+    # step 1: one month of ratings, up to the moment Note 4 was shown
+    note4_shown_ms = int(status.loc[status["note_label"] == "Note 4", "timestampMillisOfFirstNonNMRStatus"].iloc[0])
+    print("Step 1: reading one month of ratings")
+    ratings = read_last_month_of_ratings(note4_shown_ms)
     print(f"    {len(ratings):,} ratings")
 
-    print("Step 2: X's filters (notes 5+ ratings, raters 10+ ratings)")
-    ratings = apply_x_filters(ratings)
-    print(f"    {len(ratings):,} ratings, {ratings['noteId'].nunique():,} notes, {ratings['raterParticipantId'].nunique():,} raters")
+    # step 2: X's 5 / 10 rule
+    print("Step 2: keeping notes with 5+ ratings and raters with 10+")
+    ratings = keep_active_notes_and_raters(ratings)
+    print(f"    {len(ratings):,} ratings, {ratings['noteId'].nunique():,} notes, "
+          f"{ratings['raterParticipantId'].nunique():,} raters")
 
-    print("Step 3: fitting X's matrix factorization model")
+    # step 3: X's model
+    print("Step 3: running X's model (a few minutes)")
     model = MatrixFactorization(seed=42, log=False)
-    note_params, rater_params, global_intercept = model.run_mf(ratings)
-    print(f"    done, global intercept {global_intercept:.3f}")
+    note_scores, rater_scores, _ = model.run_mf(ratings)
 
-    print("Step 4: saving the results")
-    note_params = note_params.rename(columns={"internalNoteIntercept": "helpfulness_score",
+    # step 4: save the 4 Saudi notes and the Saudi raters
+    note_scores = note_scores.rename(columns={"internalNoteIntercept": "helpfulness_score",
                                               "internalNoteFactor1": "one_sidedness"})
-    saudi_scores = notes[["noteId", "note_label", "writer_type"]].merge(
-        note_params[["noteId", "helpfulness_score", "one_sidedness"]], on="noteId")
+    saudi_scores = notes[["noteId", "note_label", "writer_type"]].merge(note_scores, on="noteId")
     saudi_scores = saudi_scores.merge(status[["noteId", "currentStatus", "currentExpansionStatus"]], on="noteId")
+    saudi_scores = saudi_scores[["noteId", "note_label", "writer_type", "helpfulness_score", "one_sidedness",
+                                 "currentStatus", "currentExpansionStatus"]]
     saudi_scores.to_csv(os.path.join(SAUDI_FOLDER, "model_scores.csv"), index=False)
+    print("Step 4: saved model_scores.csv")
     print(saudi_scores.to_string(index=False))
 
-    rater_params = rater_params.rename(columns={"internalRaterIntercept": "rater_generosity",
+    rater_scores = rater_scores.rename(columns={"internalRaterIntercept": "rater_generosity",
                                                 "internalRaterFactor1": "rater_side"})
-    saudi_rater_ids = set(saudi_ratings["raterParticipantId"])
-    saudi_raters = rater_params[rater_params["raterParticipantId"].isin(saudi_rater_ids)]
+    saudi_raters = rater_scores[rater_scores["raterParticipantId"].isin(saudi_ratings["raterParticipantId"])]
     saudi_raters.to_csv(os.path.join(SAUDI_FOLDER, "rater_sides.csv"), index=False)
-    print(f"    sides saved for {len(saudi_raters)} of {len(saudi_rater_ids)} Saudi raters")
+    print(f"    saved rater_sides.csv ({len(saudi_raters)} raters)")
 
-    # check: do notes X really showed get higher scores in our model?
+    # check: notes X really showed should get higher scores than notes X rejected
     all_status = pd.read_csv(os.path.join("data", "noteStatusHistory-00000.tsv"), sep="\t",
                              usecols=["noteId", "currentStatus"], dtype={"noteId": str})
-    check = note_params.merge(all_status, on="noteId")
-    print("Check: average score by X's real status")
-    print(check.groupby("currentStatus")["helpfulness_score"].agg(["count", "mean"]).round(3))
+    check = note_scores.merge(all_status, on="noteId")
+    print("Check: average helpfulness_score by X's real decision")
+    print(check.groupby("currentStatus")["helpfulness_score"].mean().round(3))
 
 
 if __name__ == "__main__":
