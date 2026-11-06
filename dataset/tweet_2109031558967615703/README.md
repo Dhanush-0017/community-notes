@@ -13,6 +13,9 @@ Everything X's Community Notes data has about this one tweet (download up to Oct
 | `ratings.csv` | one person's rating of one note | `note_label`, `helpfulnessLevel`, `helpful...` / `notHelpful...` reasons, `rater_...` |
 | `note_requests.csv` | the note requests for the tweet | `suggestions` (request texts), `api...FeedEligibleAtMillis` (when AI writers could see it) |
 | `user_enrollment.csv` | one person (rater or writer) | `enrollmentState`, `modelingPopulation`, `modelingGroup` |
+| `rater_profiles.csv` | one rater (made in `saudi_summary.ipynb`, section 8) | `trust_score`, `trusted`, `total_ratings`, `valid_ratings`, `first_rating` |
+| `model_scores.csv` | one note, scored by X's own model (made by `score_with_x_model.py`) | `helpfulness_score`, `one_sidedness` |
+| `rater_sides.csv` | one rater, from X's own model (made by `score_with_x_model.py`) | `rater_side`, `rater_generosity` |
 
 ## Added columns
 
