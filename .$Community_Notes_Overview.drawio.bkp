@@ -1,0 +1,399 @@
+<mxfile host="Electron" pages="3">
+  <diagram name="Why Note 4 was shown" id="sWz8x8ao-p3GQxGZW0mK">
+    <mxGraphModel dx="1414" dy="912" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2480" pageHeight="900" background="#ffffff" math="0" shadow="0" adaptiveColors="none">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="h1" parent="1" style="text;html=1;fontSize=22;fontStyle=1;align=left;" value="Community Notes - How it works&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="36" width="700" x="20" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="h3" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" value="ratings.csv: raterParticipantId, noteId, helpfulnessLevel&lt;br&gt;user_enrollment.csv: modelingPopulation (CORE/EXPANSION), modelingGroup" vertex="1">
+          <mxGeometry height="70" width="250" x="20" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="h4" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=15;" value="Raters&lt;br&gt;(263)" vertex="1">
+          <mxGeometry height="70" width="150" x="31" y="418" as="geometry" />
+        </mxCell>
+        <mxCell id="h7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;verticalAlign=top;fontStyle=1;fontSize=15;" value="trust score (from past ratings)" vertex="1">
+          <mxGeometry height="440" width="350" x="290" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" value="past ratings of the rater" vertex="1">
+          <mxGeometry height="38" width="304" x="312" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="h9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" value="only helpful / not helpful (somewhat is ignored)" vertex="1">
+          <mxGeometry height="38" width="312" x="307" y="151" as="geometry" />
+        </mxCell>
+        <mxCell id="h10" edge="1" parent="1" source="h8" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" value="rated within 48h, before X decided" vertex="1">
+          <mxGeometry height="38" width="313" x="307" y="203" as="geometry" />
+        </mxCell>
+        <mxCell id="h12" edge="1" parent="1" source="h9" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h11" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" value="same as X&amp;#x27;s final decision?" vertex="1">
+          <mxGeometry height="38" width="307" x="306" y="261" as="geometry" />
+        </mxCell>
+        <mxCell id="h14" edge="1" parent="1" source="h11" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h13" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" value="trust = matched / valid&lt;br&gt;need 0.66+ and 10+ ratings" vertex="1">
+          <mxGeometry height="46" width="310" x="306" y="313" as="geometry" />
+        </mxCell>
+        <mxCell id="h16" edge="1" parent="1" source="h13" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h15" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="ex: Rater A&lt;br&gt;21/22 = 0.95, trusted" vertex="1">
+          <mxGeometry height="46" width="147" x="312" y="372" as="geometry" />
+        </mxCell>
+        <mxCell id="h18" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" value="Rater N&lt;br&gt;6/10 = 0.60, not trusted" vertex="1">
+          <mxGeometry height="46" width="150" x="469" y="376" as="geometry" />
+        </mxCell>
+        <mxCell id="h19" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" value="rater_profiles.csv: valid_ratings, agreeing_ratings, trust_score, trusted" vertex="1">
+          <mxGeometry height="40" width="320" x="308" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="h20" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=15;fontStyle=1;" value="Trusted - 227" vertex="1">
+          <mxGeometry height="46" width="223" x="346" y="543" as="geometry" />
+        </mxCell>
+        <mxCell id="h21" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;" value="Not trusted - 36 (dropped)" vertex="1">
+          <mxGeometry height="46" width="224" x="347" y="618" as="geometry" />
+        </mxCell>
+        <mxCell id="h22" edge="1" parent="1" source="h4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h20" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h23" edge="1" parent="1" source="h4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h21" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h24" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;verticalAlign=top;fontStyle=1;fontSize=15;dashed=1;" value="why not trusted" vertex="1">
+          <mxGeometry height="165" width="220" x="350" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="h25" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" value="trust &amp;lt; 0.66" vertex="1">
+          <mxGeometry height="32" width="193" x="361" y="736" as="geometry" />
+        </mxCell>
+        <mxCell id="h26" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" value="less than 10 ratings" vertex="1">
+          <mxGeometry height="32" width="187" x="367" y="774" as="geometry" />
+        </mxCell>
+        <mxCell id="h27" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=12;" value="most of the rated notes didn&#39;t show up under notes" vertex="1">
+          <mxGeometry height="32" width="186" x="361" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="h28" edge="1" parent="1" source="h21" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h24" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h29" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;verticalAlign=top;fontStyle=1;fontSize=15;" value="4 notes on the tweet" vertex="1">
+          <mxGeometry height="330" width="200" x="700" y="295" as="geometry" />
+        </mxCell>
+        <mxCell id="h30" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" value="Note 1 (human)" vertex="1">
+          <mxGeometry height="50" width="150" x="725" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="h31" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" value="Note 2 (AI)" vertex="1">
+          <mxGeometry height="50" width="150" x="723" y="411" as="geometry" />
+        </mxCell>
+        <mxCell id="h32" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" value="Note 3 (AI)" vertex="1">
+          <mxGeometry height="50" width="150" x="722" y="481" as="geometry" />
+        </mxCell>
+        <mxCell id="h33" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;" value="Note 4 (human)" vertex="1">
+          <mxGeometry height="50" width="150" x="725" y="551" as="geometry" />
+        </mxCell>
+        <mxCell id="h34" edge="1" parent="1" source="h20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h29" value="rate the notes">
+          <mxGeometry relative="1" x="0.2727" as="geometry">
+            <Array as="points">
+              <mxPoint x="634.5" y="566" />
+              <mxPoint x="634.5" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="h35" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" value="notes.csv: noteId, tweetId, summary (note text),&lt;br&gt;writer_enrollmentState (apiEarnedIn = AI)" vertex="1">
+          <mxGeometry height="60" width="240" x="700" y="645" as="geometry" />
+        </mxCell>
+        <mxCell id="h36" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;verticalAlign=top;fontStyle=1;fontSize=15;" value="X algorithm" vertex="1">
+          <mxGeometry height="730" width="330" x="970" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h37" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" value="1. ratings&lt;br&gt;helpful 1, somewhat 0.5, not helpful 0" vertex="1">
+          <mxGeometry height="62" width="293" x="988" y="92" as="geometry" />
+        </mxCell>
+        <mxCell id="h38" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" value="2. which model? Core or Expansion&lt;br&gt;Core needs 50% Core raters&lt;br&gt;here only 19-25% -&amp;gt; Expansion model" vertex="1">
+          <mxGeometry height="62" width="285" x="989" y="184" as="geometry" />
+        </mxCell>
+        <mxCell id="h39" edge="1" parent="1" source="h37" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h38" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h40" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" value="3. finds each rater&amp;#x27;s side&lt;br&gt;group 24 ~ +0.39, group 13 ~ -0.04" vertex="1">
+          <mxGeometry height="62" width="285" x="994" y="277" as="geometry" />
+        </mxCell>
+        <mxCell id="h41" edge="1" parent="1" source="h38" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h40" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h42" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" value="4. each note gets 2 numbers:&lt;br&gt;helpfulness score + one-sidedness" vertex="1">
+          <mxGeometry height="62" width="287" x="986" y="366" as="geometry" />
+        </mxCell>
+        <mxCell id="h43" edge="1" parent="1" source="h40" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h42" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h44" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontStyle=1;" value="5. rules" vertex="1">
+          <mxGeometry height="30" width="292" x="993" y="462" as="geometry" />
+        </mxCell>
+        <mxCell id="h45" edge="1" parent="1" source="h42" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h44" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h46" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;" value="shown: score 0.40+ and one-sided &amp;lt; 0.5" vertex="1">
+          <mxGeometry height="44" width="289" x="992" y="508" as="geometry" />
+        </mxCell>
+        <mxCell id="h47" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;" value="blocked: one-sided 0.5+ or score &amp;lt; 0.30" vertex="1">
+          <mxGeometry height="44" width="291" x="993" y="561" as="geometry" />
+        </mxCell>
+        <mxCell id="h48" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;" value="else: needs more ratings" vertex="1">
+          <mxGeometry height="44" width="287" x="991" y="614" as="geometry" />
+        </mxCell>
+        <mxCell id="h49" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" value="ratings.csv: helpfulnessLevel, rater_modelingGroup" vertex="1">
+          <mxGeometry height="40" width="290" x="990" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="h50" edge="1" parent="1" source="h29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h36" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h51" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;verticalAlign=top;fontStyle=1;fontSize=15;" value="Note 4 vs the others" vertex="1">
+          <mxGeometry height="610" width="560" x="1360" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h52" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#000000;" value="one-sidedness (X&amp;#x27;s limit is 0.5)" vertex="1">
+          <mxGeometry height="22" width="300" x="1380" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="h53" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="36" width="255" x="1385" y="157" as="geometry" />
+        </mxCell>
+        <mxCell id="h54" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="" vertex="1">
+          <mxGeometry height="36" width="255" x="1640" y="157" as="geometry" />
+        </mxCell>
+        <mxCell id="h55" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#333333;" value="ok" vertex="1">
+          <mxGeometry height="20" width="40" x="1391" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="h56" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#333333;" value="too one-sided" vertex="1">
+          <mxGeometry height="20" width="95" x="1800" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="h57" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" value="0" vertex="1">
+          <mxGeometry height="18" width="20" x="1381" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="h58" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" value="0.5" vertex="1">
+          <mxGeometry height="18" width="30" x="1630" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="h59" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" value="1" vertex="1">
+          <mxGeometry height="18" width="20" x="1887" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="h60" parent="1" style="ellipse;fillColor=#82b366;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="14" width="14" x="1541.2" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="h61" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Note 4 = 0.32" vertex="1">
+          <mxGeometry height="28" width="170" x="1450" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="h62" edge="1" parent="1" source="h61" style="html=1;strokeColor=#82b366;fontSize=11;endArrow=classic;" target="h60" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h63" parent="1" style="ellipse;fillColor=#b85450;strokeColor=#b85450;" value="" vertex="1">
+          <mxGeometry height="14" width="14" x="1666.15" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="h64" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" value="Notes 1-3 = 0.56-0.57" vertex="1">
+          <mxGeometry height="28" width="190" x="1640" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="h65" edge="1" parent="1" source="h64" style="html=1;strokeColor=#b85450;fontSize=11;endArrow=classic;" target="h63" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h66" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#333333;" value="Note 4 also has the highest score: 0.21 (others 0.12-0.15)" vertex="1">
+          <mxGeometry height="22" width="500" x="1380" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="h67" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=13;fontColor=#000000;" value="other side - % helpful" vertex="1">
+          <mxGeometry height="22" width="300" x="1380" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="h68" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#000000;" value="Note 1" vertex="1">
+          <mxGeometry height="20" width="60" x="1380" y="314" as="geometry" />
+        </mxCell>
+        <mxCell id="h69" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="" vertex="1">
+          <mxGeometry height="26" width="279" x="1440" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="h70" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#000000;" value="31%" vertex="1">
+          <mxGeometry height="20" width="40" x="1725" y="314" as="geometry" />
+        </mxCell>
+        <mxCell id="h71" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#000000;" value="Note 2" vertex="1">
+          <mxGeometry height="20" width="60" x="1380" y="354" as="geometry" />
+        </mxCell>
+        <mxCell id="h72" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="" vertex="1">
+          <mxGeometry height="26" width="324" x="1440" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="h73" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#000000;" value="36%" vertex="1">
+          <mxGeometry height="20" width="40" x="1770" y="354" as="geometry" />
+        </mxCell>
+        <mxCell id="h74" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#000000;" value="Note 3" vertex="1">
+          <mxGeometry height="20" width="60" x="1380" y="394" as="geometry" />
+        </mxCell>
+        <mxCell id="h75" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="" vertex="1">
+          <mxGeometry height="26" width="360" x="1440" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="h76" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#000000;" value="40%" vertex="1">
+          <mxGeometry height="20" width="40" x="1806" y="394" as="geometry" />
+        </mxCell>
+        <mxCell id="h77" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#000000;" value="Note 4" vertex="1">
+          <mxGeometry height="20" width="60" x="1380" y="434" as="geometry" />
+        </mxCell>
+        <mxCell id="h78" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="" vertex="1">
+          <mxGeometry height="26" width="423" x="1440" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="h79" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#000000;" value="47%" vertex="1">
+          <mxGeometry height="20" width="40" x="1869" y="434" as="geometry" />
+        </mxCell>
+        <mxCell id="h80" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#333333;" value="main side liked all 4 (84-90%)" vertex="1">
+          <mxGeometry height="22" width="400" x="1380" y="475" as="geometry" />
+        </mxCell>
+        <mxCell id="h81" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" value="model_scores.csv: helpfulness_score, one_sidedness&lt;br&gt;rater_sides.csv: rater_side   (both from score_with_x_model.py)" vertex="1">
+          <mxGeometry height="40" width="520" x="1380" y="515" as="geometry" />
+        </mxCell>
+        <mxCell id="h82" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" value="* our numbers use 1 month of ratings, X uses more. so compare notes with each other.&lt;br&gt;  Note 3 is still waiting in X&amp;#x27;s data, not blocked." vertex="1">
+          <mxGeometry height="50" width="530" x="1380" y="595" as="geometry" />
+        </mxCell>
+        <mxCell id="h83" edge="1" parent="1" source="h36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h51" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h84" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;" value="Note 1: blocked (0.57)" vertex="1">
+          <mxGeometry height="46" width="216" x="1983" y="202" as="geometry" />
+        </mxCell>
+        <mxCell id="h85" edge="1" parent="1" source="h51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h84" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h86" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;" value="Note 2: blocked (0.56)" vertex="1">
+          <mxGeometry height="46" width="213" x="1984" y="269" as="geometry" />
+        </mxCell>
+        <mxCell id="h87" edge="1" parent="1" source="h51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h86" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h88" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;" value="Note 3: waiting (0.57)*" vertex="1">
+          <mxGeometry height="46" width="211" x="1985" y="345" as="geometry" />
+        </mxCell>
+        <mxCell id="h89" edge="1" parent="1" source="h51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h88" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h90" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontStyle=1;" value="Note 4: SHOWN (0.32)" vertex="1">
+          <mxGeometry height="46" width="211" x="1986" y="418" as="geometry" />
+        </mxCell>
+        <mxCell id="h91" edge="1" parent="1" source="h51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h90" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h92" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" value="note_status.csv: currentStatus,&lt;br&gt;currentExpansionStatus (FIRM_REJECT = 1 &amp;amp; 2),&lt;br&gt;currentDecidedBy (ExpansionModel)" vertex="1">
+          <mxGeometry height="60" width="230" x="1985" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="h93" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;" value="Note 4 shown on the tweet&lt;br&gt;both sides found it helpful" vertex="1">
+          <mxGeometry height="70" width="195" x="2250" y="301" as="geometry" />
+        </mxCell>
+        <mxCell id="h94" edge="1" parent="1" source="h90" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h93" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h95" parent="1" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" value="combined.csv: tweetId, tweet_text, note_text" vertex="1">
+          <mxGeometry height="40" width="200" x="2250" y="385" as="geometry" />
+        </mxCell>
+        <mxCell id="LxNTcKpXEHXFV_WS3zzh-6" edge="1" parent="1" source="h7" style="endArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="420" y="550" as="sourcePoint" />
+            <mxPoint x="465" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="Algo" id="Q7Jp0c1AAMe8QcNocMJk">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="2000" pageHeight="1330" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="algo-title" parent="1" style="text;html=1;fontSize=30;fontStyle=1;align=center;" value="Community Notes Algorithm" vertex="1">
+          <mxGeometry height="50" width="1960" x="20" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="a-in" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;WHAT X USES&lt;/font&gt;&lt;/b&gt;&lt;br&gt;The notes people wrote&lt;br&gt;The ratings people gave&lt;br&gt;Each person&amp;#x27;s country group&lt;br&gt;&amp;nbsp;&lt;br&gt;No fact-check data. X never checks if a note is true; it only looks at ratings.&lt;br&gt;&lt;font style=&quot;font-size:15px&quot; color=&quot;#777777&quot;&gt;code: main.py, runner.py&lt;/font&gt;" vertex="1">
+          <mxGeometry height="281" width="400" x="20" y="86.5" as="geometry" />
+        </mxCell>
+        <mxCell id="a-clean" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2f6fb0;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;STEP 1: REMOVE WEAK DATA&lt;/font&gt;&lt;/b&gt;&lt;br&gt;Ignore people with fewer than 10 ratings&lt;br&gt;Ignore notes with fewer than 5 ratings&lt;br&gt;Merge people who always rate the same way (possible fake accounts)&lt;br&gt;&lt;font style=&quot;font-size:15px&quot; color=&quot;#777777&quot;&gt;code: run_prescoring()&lt;/font&gt;" vertex="1">
+          <mxGeometry height="254" width="430" x="490" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="a-trust" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#c79a00;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;STEP 2: WHO TO TRUST&lt;/font&gt;&lt;/b&gt;&lt;br&gt;Each person gets a trust score: how often their past ratings matched the final result&lt;br&gt;Only trusted people count (about 2 out of 3 right)&lt;br&gt;&lt;font style=&quot;font-size:15px&quot; color=&quot;#777777&quot;&gt;code: helpfulness_scores.py&lt;/font&gt;" vertex="1">
+          <mxGeometry height="227" width="460" x="990" y="113.5" as="geometry" />
+        </mxCell>
+        <mxCell id="a-score" parent="1" style="whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#7a4fb0;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;STEP 3: SCORE EACH NOTE&lt;/font&gt;&lt;/b&gt;&lt;br&gt;The program learns which people usually disagree with each other&lt;br&gt;HIGH score: people who usually disagree BOTH like the note&lt;br&gt;LOW score: only one side likes it&lt;br&gt;&lt;font style=&quot;font-size:15px&quot; color=&quot;#777777&quot;&gt;code: mf_core_scorer.py, mf_expansion_scorer.py&lt;/font&gt;" vertex="1">
+          <mxGeometry height="227" width="480" x="980" y="438" as="geometry" />
+        </mxCell>
+        <mxCell id="a-decide" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#2e8b3e;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;STEP 4: DECIDE&lt;/font&gt;&lt;/b&gt;&lt;br&gt;Score 0.40 or more: SHOWN&lt;br&gt;Score under 0.30, or liked by one side only: BLOCKED&lt;br&gt;In between: WAIT for more ratings&lt;br&gt;Decision is fixed after 2 weeks&lt;br&gt;&lt;font style=&quot;font-size:15px&quot; color=&quot;#777777&quot;&gt;code: scoring_rules.py&lt;/font&gt;" vertex="1">
+          <mxGeometry height="227" width="460" x="1530" y="438" as="geometry" />
+        </mxCell>
+        <mxCell id="a-judges" parent="1" style="whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;TWO JUDGES: the same program, run on different people&lt;/font&gt;&lt;/b&gt;&lt;br&gt;CORE judge: uses people from countries where Community Notes started (for example the USA)&lt;br&gt;EXPANSION judge: also uses people from countries where Community Notes started recently&lt;br&gt;A judge only decides a note if at least HALF of the note&amp;#x27;s ratings come from its own people&lt;br&gt;If both judges can decide, the CORE judge wins&lt;br&gt;&lt;font style=&quot;font-size:15px&quot; color=&quot;#777777&quot;&gt;code: constants.py (group lists), scorer.py (the half rule)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="199" width="1100" x="670" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="algo-e0" edge="1" parent="1" source="a-in" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="a-clean" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="algo-e1" edge="1" parent="1" source="a-clean" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="a-trust" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="algo-e2" edge="1" parent="1" source="a-trust" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="a-score" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="algo-e3" edge="1" parent="1" source="a-score" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="a-decide" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="algo-e4" edge="1" parent="1" source="a-judges" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=0;entryX=0.5;entryY=1;dashed=1;" target="a-score" value="steps 3 and 4 run once per judge">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="Tweet" id="q9dbtRe0o3E2rTrcBOLa">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="2000" pageHeight="1080" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="saudi-title" parent="1" style="text;html=1;fontSize=30;fontStyle=1;align=center;" value="&quot;SAUDI IS BURNING&quot;&amp;nbsp;" vertex="1">
+          <mxGeometry height="190" width="1960" x="21" y="-130" as="geometry" />
+        </mxCell>
+        <mxCell id="s-rate" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;fontFamily=Verdana;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;1. PEOPLE RATED THE 4 NOTES&lt;/font&gt;&lt;/b&gt;&lt;br&gt;263 people gave 456 ratings&lt;br&gt;Each rating: helpful, somewhat helpful, or not helpful" vertex="1">
+          <mxGeometry height="217" width="360" x="10" y="77.5" as="geometry" />
+        </mxCell>
+        <mxCell id="s-clean" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2f6fb0;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;" value="&lt;font face=&quot;Verdana&quot;&gt;&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;2. WEAK DATA REMOVED&lt;/font&gt;&lt;/b&gt;&lt;br&gt;Only 21 people had too few ratings&lt;br&gt;Almost all ratings were kept&lt;/font&gt;" vertex="1">
+          <mxGeometry height="156.5" width="380" x="435" y="107.75" as="geometry" />
+        </mxCell>
+        <mxCell id="s-which" parent="1" style="whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#c79a00;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;fontFamily=Verdana;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;3. WHICH JUDGE DECIDES?&lt;/font&gt;&lt;/b&gt;&lt;br&gt;The CORE judge needs half of the ratings from its people&lt;br&gt;Here only about 1 in 5 ratings came from CORE people&lt;br&gt;So the CORE judge cannot decide" vertex="1">
+          <mxGeometry height="199" width="440" x="880" y="86.5" as="geometry" />
+        </mxCell>
+        <mxCell id="s-core" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#b3b3b3;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;dashed=1;fontColor=#888888;fontFamily=Verdana;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;CORE JUDGE: SKIPPED&lt;/font&gt;&lt;/b&gt;&lt;br&gt;Not enough of its people rated these notes" vertex="1">
+          <mxGeometry height="90" width="580" x="1400" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="s-exp" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#2f6fb0;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;strokeWidth=3.5;fontFamily=Verdana;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;EXPANSION JUDGE: DECIDES&lt;/font&gt;&lt;/b&gt;&lt;br&gt;Most raters were from countries where Community Notes is new, probably the Middle East" vertex="1">
+          <mxGeometry height="117" width="580" x="1400" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="s-score" parent="1" style="whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#7a4fb0;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;fontFamily=Verdana;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;4. HOW THE JUDGE SCORED THE NOTES&lt;/font&gt;&lt;/b&gt;&lt;br&gt;One group of raters (group 24) liked all 4 notes&lt;br&gt;Another group (group 13) was split&lt;br&gt;The judge looks for notes that people who usually disagree BOTH like" vertex="1">
+          <mxGeometry height="172" width="600" x="1390" y="447" as="geometry" />
+        </mxCell>
+        <mxCell id="s-decide" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#2e8b3e;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;fontFamily=Verdana;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;5. THE DECISION&lt;/font&gt;&lt;/b&gt;&lt;br&gt;Note 1 (person): BLOCKED&lt;br&gt;Note 2 (AI): BLOCKED&lt;br&gt;Note 3 (AI): WAITING for more ratings&lt;br&gt;Note 4 (person): SHOWN" vertex="1">
+          <mxGeometry height="172" width="580" x="730" y="447" as="geometry" />
+        </mxCell>
+        <mxCell id="s-shown" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#2e8b3e;strokeWidth=2.5;align=left;verticalAlign=top;spacingTop=12;spacingRight=12;fontSize=21;rounded=1;arcSize=6;spacingLeft=16;strokeWidth=4;fontFamily=Verdana;" value="&lt;b&gt;&lt;font style=&quot;font-size:24px&quot;&gt;6. SHOWN ON X&lt;/font&gt;&lt;/b&gt;&lt;br&gt;Note 4 appeared under the tweet&lt;br&gt;7.5 hours after the tweet was posted&lt;br&gt;Written by a person: their first note ever&lt;br&gt;It beat 2 notes from the most active AI writers on X" vertex="1">
+          <mxGeometry height="172" width="620" x="710" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="saudi-e0" edge="1" parent="1" source="s-rate" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="s-clean" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="saudi-e1" edge="1" parent="1" source="s-clean" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="s-which" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="saudi-e2" edge="1" parent="1" source="s-which" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;dashed=1;strokeColor=#b3b3b3;fontColor=#888888;" target="s-core" value="not enough">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="saudi-e3" edge="1" parent="1" source="s-which" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="s-exp" value="this one">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="saudi-e4" edge="1" parent="1" source="s-exp" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="s-score" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="saudi-e5" edge="1" parent="1" source="s-score" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="s-decide" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="saudi-e6" edge="1" parent="1" source="s-decide" style="endArrow=classic;endSize=10;html=1;strokeWidth=3;strokeColor=#333333;fontSize=17;labelBackgroundColor=#ffffff;" value="Note 4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1020" y="710" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

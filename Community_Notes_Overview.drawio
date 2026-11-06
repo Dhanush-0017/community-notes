@@ -1,6 +1,6 @@
 <mxfile host="Electron" pages="3">
   <diagram name="Why Note 4 was shown" id="sWz8x8ao-p3GQxGZW0mK">
-    <mxGraphModel dx="1414" dy="912" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2480" pageHeight="900" background="#ffffff" math="0" shadow="0" adaptiveColors="none">
+    <mxGraphModel dx="964" dy="755" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2480" pageHeight="900" background="#ffffff" math="0" shadow="0" adaptiveColors="none">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -117,7 +117,7 @@
         <mxCell id="h39" edge="1" parent="1" source="h37" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h38" value="">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="h40" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" value="3. finds each rater&amp;#x27;s side&lt;br&gt;group 24 ~ +0.39, group 13 ~ -0.04" vertex="1">
+        <mxCell id="h40" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=13;" value="3. Model learns from who agree&#39;s with whom.&lt;br&gt;finds each rater&#39;s side&lt;br&gt;group 24 ~ +0.39, group 13 ~ -0.04" vertex="1">
           <mxGeometry height="62" width="285" x="994" y="277" as="geometry" />
         </mxCell>
         <mxCell id="h41" edge="1" parent="1" source="h38" style="exitX=0.5;exitY=1;entryX=0.5;entryY=0;html=1;strokeColor=#000000;fontSize=11;endArrow=classic;" target="h40" value="">

@@ -1,24 +1,22 @@
 # X Community Notes: how a note gets shown
 
-I'm a Graduate Research Assistant at Georgia State University. This project uses X's public Community Notes data to understand how X decides which note is shown under a tweet.
+This project uses X's public Community Notes data to understand how X decides which note is shown under a tweet.
 
 Community Notes in short: people write notes on tweets, other people rate the notes (Helpful / Somewhat / Not Helpful), and X's algorithm decides which note is shown.
 
-## What I did
+## Overview
 
-1. **Built a dataset** of 500 recent Helpful notes on 500 English tweets (Oct 5-12, 2026) -> `dataset/10-05_10-13/`
-2. **Explored it** (EDA) -> `eda_summary.ipynb`. Main finding: 63% of the Helpful notes were written by AI note writers.
-3. **Picked one tweet** ("SAUDI IS BURNING") that got 4 notes, where only Note 4 was shown, and collected everything about it -> `dataset/tweet_2109031558967615703/`
-4. **Read X's open-source algorithm code** (github.com/twitter/communitynotes) to find the real rules.
-5. **Recreated the steps** on that tweet -> `saudi_summary.ipynb` and `score_with_x_model.py`:
+1. **Dataset:** 500 recent Helpful notes on 500 English tweets (Oct 5-12, 2026) -> `dataset/10-05_10-13/`
+2. **EDA:** `eda_summary.ipynb`. Main finding: 63% of the Helpful notes were written by AI note writers.
+3. **Case study:** one tweet ("SAUDI IS BURNING") with 4 notes, where only Note 4 was shown -> `dataset/tweet_2109031558967615703/`
+4. **X's steps on that tweet**, based on X's open-source code (github.com/twitter/communitynotes) -> `saudi_summary.ipynb` and `score_with_x_model.py`:
    - which raters X trusts (trust score from their past ratings)
    - which model decides (Core or Expansion)
    - each note's helpfulness score and one-sidedness, using X's own model code
-6. **Drew the whole flow** -> `Community_Notes.drawio`, tab "Why Note 4 was shown"
 
 **Result:** Note 4 was not shown because it got more votes. It was shown because raters who usually disagree **both** found it helpful. Notes 1-3 were liked mostly by one side.
 
-## How it works (the flow in the diagram)
+## How it works
 
 ```
 raters -> trusted or not -> they rate the 4 notes -> X's model -> score + one-sidedness -> shown / waiting / blocked
@@ -51,7 +49,7 @@ data/
 └── userEnrollment-00000.tsv
 ```
 
-I used the download with data up to Oct 13, 2026.
+Data version used: the download with data up to Oct 13, 2026.
 
 ### Saudi tweet folder (`dataset/tweet_2109031558967615703/`)
 
@@ -71,7 +69,7 @@ I used the download with data up to Oct 13, 2026.
 
 `notes.csv`, `ratings.csv`, `note_status.csv`, `tweets.csv`, `combined.csv` (one row = one note with its tweet and rating counts), and the same files in `10-05_10-13.xlsx`.
 
-How I chose the notes: Helpful notes written Oct 5-13, 2026, one note per tweet (the one with the most ratings), random order (seed 42), English tweets that still exist, stop at 500. The Saudi note is always included.
+How the notes were chosen: Helpful notes written Oct 5-13, 2026, one note per tweet (the one with the most ratings), random order (seed 42), English tweets that still exist, stop at 500. The Saudi note is always included.
 
 ## Files
 
@@ -84,10 +82,10 @@ How I chose the notes: Helpful notes written Oct 5-13, 2026, one note per tweet 
 | `check_dataset.py` | checks a dataset folder (PASS / FAIL) |
 | `eda_10-05_10-13.ipynb` | full EDA of the 500 notes |
 | `eda_summary.ipynb` | the 4 main EDA findings |
-| `saudi_summary.ipynb` | the Saudi tweet, step by step (same steps as the diagram) |
+| `saudi_summary.ipynb` | the Saudi tweet, step by step |
 | `saudi_tweet.ipynb` | an older, shorter look at the Saudi tweet |
 | `score_with_x_model.py` | runs X's own model on one month of ratings |
-| `Community_Notes.drawio` | the diagrams |
+| `Community_Notes_Overview.drawio` | diagram of the flow |
 
 ## How to run
 
@@ -103,7 +101,7 @@ To run `score_with_x_model.py`, put X's code next to this folder (`../communityn
 
 ## Limits
 
-- My model scores use one month of ratings; X uses its full history, so my scores are lower than X's. Compare the notes with each other.
-- My trust score is a close copy of X's rule. It skips the small penalty for rating abusive notes as Helpful.
+- The model scores use one month of ratings; X uses its full history, so these scores are lower than X's. Compare the notes with each other.
+- The trust score is a close copy of X's rule. It skips the small penalty for rating abusive notes as Helpful.
 - Notes from the last days of the date range have fewer ratings, because people were still rating them.
 - Deleted or private tweets were skipped.
