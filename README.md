@@ -6,7 +6,7 @@ Community Notes in short: people write notes on tweets, other people rate the no
 
 ## Overview
 
-1. **Dataset:** 500 recent Helpful notes on 500 English tweets (Oct 5-12, 2026) -> `dataset/10-05_10-13/`
+1. **Dataset:** 500 recent Helpful notes on 500 English tweets (Oct 5-12, 2026) -> `dataset/10-05_10-13_helpful/`
 2. **EDA:** `eda_summary.ipynb`. Main finding: 63% of the Helpful notes were written by AI note writers.
 3. **Case study:** one tweet ("SAUDI IS BURNING") with 4 notes, where only Note 4 was shown -> `dataset/tweet_2109031558967615703/`
 4. **X's steps on that tweet**, based on X's open-source code (github.com/twitter/communitynotes) -> `saudi_summary.ipynb` and `score_with_x_model.py`:
@@ -65,18 +65,30 @@ Data version used: the download with data up to Oct 13, 2026.
 | `model_scores.csv` | one note (made by `score_with_x_model.py`) | `helpfulness_score`, `one_sidedness` |
 | `rater_sides.csv` | one rater (made by `score_with_x_model.py`) | `rater_side`, `rater_generosity` |
 
-### 500-note folder (`dataset/10-05_10-13/`)
+### 500-note folder (`dataset/10-05_10-13_helpful/`)
 
 `notes.csv`, `ratings.csv`, `note_status.csv`, `tweets.csv`, `combined.csv` (one row = one note with its tweet and rating counts), and the same files in `10-05_10-13.xlsx`.
 
 How the notes were chosen: Helpful notes written Oct 5-13, 2026, one note per tweet (the one with the most ratings), random order (seed 42), English tweets that still exist, stop at 500. The Saudi note is always included.
 
+### Paired folder (`dataset/05-01_10-13_paired/`)
+
+500 English tweets (May 1 - Oct 13, 2026) that each have a Helpful note **and** a Not Helpful note. Only about 4 such tweets appear a day, so the dates go back to May. One row = one note with its tweet, in CSV and Excel:
+
+| File | Rows | Notes |
+|---|---|---|
+| `helpful.csv` / `.xlsx` | 500 | one `CURRENTLY_RATED_HELPFUL` note per tweet (the one with the most ratings) |
+| `not_helpful.csv` / `.xlsx` | 614 | every `CURRENTLY_RATED_NOT_HELPFUL` note on those tweets |
+| `balanced.csv` / `.xlsx` | 1,000 | one Helpful + one Not Helpful note per tweet (500 + 500), with a `label` column |
+
+`tweetId` connects the two files.
+
 ## Files
 
 | File | What it does |
 |---|---|
-| `build_helpful_dataset.py` | builds the 500-note dataset (uses `choose_notes.py`, `get_tweets.py`, `collect_data.py`) |
-| `settings.py` | dates, paths and other settings |
+| `build_dataset.py` | builds both datasets: `helpful`, `paired` (uses `choose_notes.py`, `get_tweets.py`, `collect_data.py`) |
+| `settings.py` | each dataset's dates and folder (`DATASETS`), paths and other settings |
 | `x_api.py`, `get_tweet.py` | read tweets from the X API |
 | `find_tweet_data.py` | collects everything about one tweet into `dataset/tweet_<tweetId>/` |
 | `check_dataset.py` | checks a dataset folder (PASS / FAIL) |
@@ -92,8 +104,9 @@ How the notes were chosen: Helpful notes written Oct 5-13, 2026, one note per tw
 Python 3.10+, then `pip install -r requirements.txt`. For the X API, make a `.env` file with `X_API=your_bearer_token`.
 
 ```
-python build_helpful_dataset.py                  # build the 500-note dataset (uses the X API)
-python check_dataset.py dataset/10-05_10-13      # check it
+python build_dataset.py helpful                 # 500 Helpful notes, Oct 5-13 (uses the X API)
+python build_dataset.py paired                  # 500 tweets with a Helpful and a Not Helpful note + balanced
+python check_dataset.py dataset/10-05_10-13_helpful   # check a folder
 python find_tweet_data.py 2109031558967615703    # everything about one tweet
 ```
 

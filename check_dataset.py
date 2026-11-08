@@ -35,7 +35,7 @@ def main():
 
     if not os.path.isdir(folder):
         print("Folder not found:", folder)
-        print("Run build_helpful_dataset.py first to make it.")
+        print("Run build_dataset.py first to make it.")
         return
 
     print("Checking folder:", folder)

@@ -1,17 +1,22 @@
 """Step 1: choose the candidate notes.
 
-A candidate is a Helpful note written between START_DATE and END_DATE that is in
-Notes, Note Status and Ratings. Each tweet keeps only one note.
+A candidate is a note with the chosen status (Helpful or Not Helpful), written in the
+chosen dates, that is in Notes, Note Status and Ratings. Each tweet keeps only one note.
 """
 
 import pandas as pd
 
-from settings import START_DATE, END_DATE, MUST_HAVE_NOTE_ID, RANDOM_SEED
+from settings import RANDOM_SEED
 from settings import find_files, read_rows_for_notes
 
 
-def get_helpful_note_ids() -> set:
-    """Find the Helpful notes written between START_DATE and END_DATE.
+def get_note_ids(status_name: str, start_date: str, end_date: str) -> set:
+    """Find the notes with one status, written between start_date and end_date.
+
+    Args:
+        status_name: X's status, e.g. "CURRENTLY_RATED_HELPFUL" or "CURRENTLY_RATED_NOT_HELPFUL".
+        start_date: first day, like "2026-10-05" (included).
+        end_date: last day, like "2026-10-13" (included).
 
     Returns:
         A set of noteIds.
@@ -24,36 +29,36 @@ def get_helpful_note_ids() -> set:
         dtype={"noteId": str},
     )
 
-    is_helpful = status["currentStatus"] == "CURRENTLY_RATED_HELPFUL"
-    helpful_rows = status[is_helpful]
-    print("Step 1:", len(helpful_rows), "Helpful notes in Note Status")
+    has_status = status["currentStatus"] == status_name
+    status_rows = status[has_status]
+    print("Step 1:", len(status_rows), status_name, "notes in Note Status")
 
     # createdAtMillis is in milliseconds, so turn it into a day like "2026-10-05"
-    # that can be compared with START_DATE and END_DATE.
-    note_times = pd.to_datetime(helpful_rows["createdAtMillis"], unit="ms", utc=True)
+    # that can be compared with start_date and end_date.
+    note_times = pd.to_datetime(status_rows["createdAtMillis"], unit="ms", utc=True)
     note_days = note_times.dt.strftime("%Y-%m-%d")
 
-    is_on_or_after_start = note_days >= START_DATE
-    is_on_or_before_end = note_days <= END_DATE
+    is_on_or_after_start = note_days >= start_date
+    is_on_or_before_end = note_days <= end_date
     is_in_date_range = is_on_or_after_start & is_on_or_before_end
-    helpful_rows = helpful_rows[is_in_date_range]
+    status_rows = status_rows[is_in_date_range]
 
-    helpful_ids = set(helpful_rows["noteId"])
+    note_ids = set(status_rows["noteId"])
 
-    print("       ", len(helpful_ids), "of them were written between", START_DATE, "and", END_DATE)
-    return helpful_ids
+    print("       ", len(note_ids), "of them were written between", start_date, "and", end_date)
+    return note_ids
 
 
-def keep_notes_in_notes_files(helpful_ids: set) -> pd.DataFrame:
+def keep_notes_in_notes_files(note_ids: set) -> pd.DataFrame:
     """Find the notes in the Notes files.
 
     Args:
-        helpful_ids: the noteIds to look for.
+        note_ids: the noteIds to look for.
 
     Returns:
         A table with the noteId and tweetId of each note that was found.
     """
-    notes = read_rows_for_notes("notes", helpful_ids, columns=["noteId", "tweetId"])
+    notes = read_rows_for_notes("notes", note_ids, columns=["noteId", "tweetId"])
     notes = notes.drop_duplicates("noteId")
 
     print("       ", len(notes), "of them are in Notes")
@@ -162,25 +167,26 @@ def shuffle_notes(notes: pd.DataFrame) -> pd.DataFrame:
     return notes
 
 
-def move_must_have_note_to_top(notes: pd.DataFrame) -> pd.DataFrame:
-    """Move MUST_HAVE_NOTE_ID to the first row, so step 2 always chooses it.
+def move_must_have_note_to_top(notes: pd.DataFrame, must_have_note: str) -> pd.DataFrame:
+    """Move must_have_note to the first row, so the tweet step always chooses it.
 
     Args:
         notes: a table with a noteId column.
+        must_have_note: the noteId to put first.
 
     Returns:
         The same notes with the must-have note first.
     """
-    is_must_have = notes["noteId"] == MUST_HAVE_NOTE_ID
+    is_must_have = notes["noteId"] == must_have_note
     must_have_row = notes[is_must_have]
 
     if len(must_have_row) == 0:
-        print("  Warning: the must-have note", MUST_HAVE_NOTE_ID, "is not in the list of notes")
+        print("  Warning: the must-have note", must_have_note, "is not in the list of notes")
         return notes
 
-    is_other_note = notes["noteId"] != MUST_HAVE_NOTE_ID
+    is_other_note = notes["noteId"] != must_have_note
     other_rows = notes[is_other_note]
 
     notes = pd.concat([must_have_row, other_rows], ignore_index=True)
-    print("        must-have note", MUST_HAVE_NOTE_ID, "moved to the top")
+    print("        must-have note", must_have_note, "moved to the top")
     return notes

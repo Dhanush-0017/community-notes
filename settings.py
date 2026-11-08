@@ -13,16 +13,30 @@ RATINGS_FILES = os.path.join("data", "ratings", "ratings-*.tsv")
 STATUS_FILES = os.path.join("data", "noteStatusHistory-*.tsv")
 ENROLLMENT_FILE = os.path.join("data", "userEnrollment-00000.tsv")
 
-OUTPUT_FOLDER = os.path.join("dataset", "10-05_10-13")
 CACHE_FILE = os.path.join("dataset", "tweet_cache.csv")
 
 
-# ---------------- dataset rules ----------------
+# ---------------- the datasets (python build_dataset.py <name>) ----------------
+# Dates are the days the Helpful notes were written; both days are included.
 
-START_DATE = "2026-10-05"   # both days are included
-END_DATE = "2026-10-13"
+DATASETS = {
+    # 500 Helpful notes, one per English tweet
+    "helpful": {
+        "folder": os.path.join("dataset", "10-05_10-13_helpful"),
+        "start_date": "2026-10-05",
+        "end_date": "2026-10-13",
+        "must_have_note": "2109061654621098457",   # Helpful note on the "SAUDI IS BURNING" tweet
+    },
 
-MUST_HAVE_NOTE_ID = "2109061654621098457"   # Helpful note on the "SAUDI IS BURNING" tweet
+    # 500 English tweets with a Helpful AND a Not Helpful note.
+    # Only about 4 such tweets appear a day (Sep 21 - Oct 13 has about 55), so the dates start on May 1.
+    "paired": {
+        "folder": os.path.join("dataset", "05-01_10-13_paired"),
+        "start_date": "2026-05-01",
+        "end_date": "2026-10-13",
+        "must_have_note": None,
+    },
+}
 
 NUMBER_OF_NOTES = 500
 LANGUAGE = "en"
