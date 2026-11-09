@@ -1,7 +1,7 @@
 """Build a Community Notes dataset. One file makes both datasets in settings.py (DATASETS):
 
-    helpful     500 Helpful notes written Oct 5-13, one per English tweet
-    paired      500 English tweets with a Helpful AND a Not Helpful note, plus a balanced file
+    helpful               500 Helpful notes written Oct 5-13, one per English tweet
+    helpful_not_helpful   500 English tweets with a Helpful AND a Not Helpful note, plus a balanced file
 
 The steps are shared:
     1. choose the notes          (choose_notes.py)
@@ -11,7 +11,7 @@ The steps are shared:
 
 Usage:
     python build_dataset.py helpful
-    python build_dataset.py paired
+    python build_dataset.py helpful_not_helpful
     add --no-tweets for a test run without the X API
 """
 
@@ -281,7 +281,7 @@ FILES_AND_KEYS = [
 ]
 
 
-# ---------------- the three datasets ----------------
+# ---------------- the two datasets ----------------
 
 def build_helpful(dataset: dict):
     """500 Helpful notes, one per English tweet. Saves notes, ratings, note_status, tweets and combined."""
@@ -323,7 +323,7 @@ def build_helpful(dataset: dict):
     save_readme(dataset["folder"], lines)
 
 
-def build_paired(dataset: dict):
+def build_helpful_not_helpful(dataset: dict):
     """500 English tweets with a Helpful AND a Not Helpful note. Saves helpful, not_helpful and balanced (CSV + Excel)."""
     # Step 1: Helpful notes in the dates, kept only if their tweet also has a Not Helpful note
     print("Step 1: choosing the notes")
@@ -353,8 +353,8 @@ def build_paired(dataset: dict):
     save_csv_and_excel(not_helpful, dataset["folder"], "not_helpful")
     save_csv_and_excel(balanced, dataset["folder"], "balanced")
 
-    lines = ["# Paired dataset: Helpful and Not Helpful notes on the same tweets", "",
-             "Made with build_dataset.py paired (random seed " + str(RANDOM_SEED) + ").",
+    lines = ["# Helpful and Not Helpful notes on the same tweets", "",
+             "Made with build_dataset.py helpful_not_helpful (random seed " + str(RANDOM_SEED) + ").",
              str(helpful["tweetId"].nunique()) + " English tweets. Each has a Helpful note written between "
              + dataset["start_date"] + " and " + dataset["end_date"] + " and at least one Not Helpful note.", "",
              "## Files (each as .csv and .xlsx, one row per note)",
@@ -378,7 +378,7 @@ def build_paired(dataset: dict):
     save_readme(dataset["folder"], lines)
 
 
-BUILDERS = {"helpful": build_helpful, "paired": build_paired}
+BUILDERS = {"helpful": build_helpful, "helpful_not_helpful": build_helpful_not_helpful}
 
 
 def main():

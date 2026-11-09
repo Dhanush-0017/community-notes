@@ -1,6 +1,6 @@
-# Paired dataset: Helpful and Not Helpful notes on the same tweets
+# Helpful and Not Helpful notes on the same tweets
 
-Made with build_paired_dataset.py (random seed 42).
+Made with build_dataset.py helpful_not_helpful (random seed 42).
 500 English tweets. Each has a Helpful note written between 2026-05-01 and 2026-10-13 and at least one Not Helpful note.
 
 ## Files (each as .csv and .xlsx, one row per note)

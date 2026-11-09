@@ -30,8 +30,8 @@ DATASETS = {
 
     # 500 English tweets with a Helpful AND a Not Helpful note.
     # Only about 4 such tweets appear a day (Sep 21 - Oct 13 has about 55), so the dates start on May 1.
-    "paired": {
-        "folder": os.path.join("dataset", "05-01_10-13_paired"),
+    "helpful_not_helpful": {
+        "folder": os.path.join("dataset", "05-01_10-13"),
         "start_date": "2026-05-01",
         "end_date": "2026-10-13",
         "must_have_note": None,

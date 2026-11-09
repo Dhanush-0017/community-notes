@@ -1,6 +1,6 @@
 # Helpful notes dataset
 
-Made with build_helpful_dataset.py (random seed 42).
+Made with build_dataset.py helpful (random seed 42).
 500 random notes written between 2026-10-05 and 2026-10-13.
 Every note is rated Helpful and is in Notes, Note Status and Ratings.
 Every note is on a different tweet. If a tweet had more than one Helpful note,
